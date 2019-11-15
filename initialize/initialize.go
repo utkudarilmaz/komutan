@@ -6,14 +6,13 @@ import (
 	logging "github.com/op/go-logging"
 )
 
-const commitMsgScript string = `
-#!/bin/bash
+const commitMsg string = `#!/bin/bash
 
-komutan validate -m $2 || exit 1
-`
+komutan validate -m $2 || exit 1`
 
 var (
-	log = logging.MustGetLogger("base")
+	log           = logging.MustGetLogger("base")
+	commitMsgPath = "/.git/hooks/commit-msg"
 )
 
 type Project struct {
