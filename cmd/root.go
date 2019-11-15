@@ -1,10 +1,14 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
+	logging "github.com/op/go-logging"
 	"github.com/spf13/cobra"
+)
+
+var (
+	log = logging.MustGetLogger("base")
 )
 
 var rootCmd = &cobra.Command{
@@ -15,7 +19,7 @@ var rootCmd = &cobra.Command{
 
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
+		log.Error(err.Error())
 		os.Exit(1)
 	}
 }

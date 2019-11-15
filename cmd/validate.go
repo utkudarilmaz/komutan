@@ -4,12 +4,10 @@ import (
 	"komutan/commit"
 	"os"
 
-	logging "github.com/op/go-logging"
 	"github.com/spf13/cobra"
 )
 
 var (
-	log     = logging.MustGetLogger("base")
 	Message string
 )
 

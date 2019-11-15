@@ -18,5 +18,6 @@ var initCmd = &cobra.Command{
 		if err != nil {
 			log.Error(err.Error())
 		}
+		log.Notice("Project initialized")
 	},
 }
