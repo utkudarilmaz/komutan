@@ -11,6 +11,10 @@ var (
 	log = logging.MustGetLogger("base")
 )
 
+// Validate the given commit message with following RegExp.
+// ^(?=.{1,72}$)(feat|fix|refactor|chore)(|\([a-zA-Z0-9]+-?[a-zA-z0-9]+)\):\s[a-z].([a-zA-Z0-9\.,_-]|\s)+[^\.\!\?=_-]$
+// RegExp rules produced based a couple policies where the policies defined
+// https://www.conventionalcommits.org
 func Validate(message string) error {
 	if len(message) > 72 || len(message) < 7 {
 		return errors.New("message length must between 7 and 72 character")
@@ -24,5 +28,3 @@ func Validate(message string) error {
 	log.Notice("commit message suitable for template")
 	return nil
 }
-
-// ^(?=.{1,72}$)(feat|fix|refactor|chore)(|\([a-zA-Z0-9]+-?[a-zA-z0-9]+)\):\s[a-z].([a-zA-Z0-9\.,_-]|\s)+[^\.\!\?=_-]$
