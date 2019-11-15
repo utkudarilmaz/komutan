@@ -1,3 +1,5 @@
+GOOS = linux
+GOARC = amd64
 VERSION ?= latest
 
 .PHONY: dep
@@ -9,5 +11,9 @@ dep:
 install: dep
 	env GOOS=linux GOARC=amd64 \
 	  go build -v -ldflags '-d -s -w' -a -tags netgo -installsuffix netgo \
+.PHONY: build
+build:
+	go build -v -ldflags '-d -s -w' -a -tags netgo -installsuffix netgo \
 	  -o dist/komutan main.go
 	@echo "Installation finished! You can find executable under dist directory."
+	@echo "You can find executable under dist directory."
