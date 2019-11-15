@@ -18,3 +18,16 @@ install: build
 	@sudo mv dist/komutan /usr/local/bin/komutan
 	@sudo chmod +x /usr/local/bin/komutan
 	@echo "Installation finished!"
+
+.PHONY: distclean
+distclean:
+	@rm -f dist/komutan
+	@echo "komutan deleted from executables."
+
+.PHONY: clean
+clean: distclean
+	@rm -rf ./*
+
+.PHONY: upgrade
+upgrade: distclean install
+	@echo "Upgrade finished!"
