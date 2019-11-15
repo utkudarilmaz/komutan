@@ -1,6 +1,7 @@
 package initialize
 
 import (
+	"errors"
 	"os"
 
 	logging "github.com/op/go-logging"
@@ -29,12 +30,14 @@ func (project *Project) setProjectDir() error {
 	return nil
 }
 
-func (project Project) checkCommitMsgScriptExist() error {
-	gitHome := project.homeDir + "/.git/hooks"
-	gitHome = gitHome
-	// TODO: Control any commit_msg script exist on project git
-	// TODO: If exist validate for overwrite the existing script
-	return nil
+func (project Project) isCommitMsgScriptExist() bool {
+	filename := project.homeDir + commitMsgPath
+
+	if _, err := os.Stat(filename); os.IsExist(err) {
+		return true
+	}
+
+	return false
 }
 
 func (project Project) writeCommitMsgScript() {
@@ -46,11 +49,15 @@ func (project Project) writeCommitMsgScript() {
 func Init() error {
 
 	project := Project{}
+
 	err := project.setProjectDir()
 	if err != nil {
 		log.Error("initializing failed")
 		return err
 	}
 
+	if err := project.isCommitMsgScriptExist(); err {
+		return errors.New("commit-msg hook exist on initialized repository")
+	}
 	return nil
 }
