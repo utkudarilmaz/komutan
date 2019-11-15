@@ -40,8 +40,30 @@ func (project Project) isCommitMsgScriptExist() bool {
 	return false
 }
 
-func (project Project) writeCommitMsgScript() {
+func (project Project) writeCommitMsgScript() error {
+	file, err := os.Create(project.homeDir + commitMsgPath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
 
+	err = file.Chmod(0755)
+	if err != nil {
+		return err
+	}
+
+	_, err = file.WriteString(commitMsg)
+
+	if err != nil {
+		return err
+	}
+
+	err = file.Sync()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Init function doing create pre commit message validation script where it is
@@ -59,5 +81,11 @@ func Init() error {
 	if err := project.isCommitMsgScriptExist(); err {
 		return errors.New("commit-msg hook exist on initialized repository")
 	}
+
+	err = project.writeCommitMsgScript()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
