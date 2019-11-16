@@ -33,7 +33,7 @@ func (project *Project) setProjectDir() error {
 func (project Project) isCommitMsgScriptExist() bool {
 	filename := project.homeDir + commitMsgPath
 
-	if _, err := os.Stat(filename); os.IsExist(err) {
+	if _, err := os.Stat(filename); err == nil {
 		return true
 	}
 
@@ -78,7 +78,7 @@ func Init() error {
 		return err
 	}
 
-	if err := project.isCommitMsgScriptExist(); err {
+	if project.isCommitMsgScriptExist() {
 		return errors.New("commit-msg hook exist on initialized repository")
 	}
 
