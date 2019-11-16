@@ -9,6 +9,7 @@ import (
 
 var (
 	log = logging.MustGetLogger("base")
+	defaultTemplate = `^(feat|fix|refactor|chore)(\([a-zA-Z0-9]*-?[a-zA-z0-9]+\))?:\s[a-z].([a-zA-Z0-9\.',_-]|\s)+[^\s\.\!\?=_-]$`
 )
 
 // Validate the given commit message with following RegExp.
@@ -20,7 +21,7 @@ func Validate(message string) error {
 		return errors.New("message length must between 7 and 72 character")
 	}
 
-	matched, _ := regexp.MatchString(`^(feat|fix|refactor|chore)(|\([a-zA-Z0-9]+-?[a-zA-z0-9]+)\):\s[a-z].([a-zA-Z0-9\.,_-]|\s)+[^\.\!\?=_-]$`, message)
+	matched, _ := regexp.MatchString(defaultTemplate, message)
 	if !matched {
 		return errors.New("commit message is not compatible with commit template")
 	}
