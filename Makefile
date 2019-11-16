@@ -21,7 +21,7 @@ install: build
 
 .PHONY: distclean
 distclean:
-	@rm -f dist/komutan
+	@sudo rm -f dist/komutan /usr/local/bin/komutan
 	@echo "komutan deleted from executables."
 
 .PHONY: clean
