@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"komutan/initialize"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -16,7 +17,8 @@ var initCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		err := initialize.Init()
 		if err != nil {
-			log.Error(err.Error())
+			log.Errorf(err.Error())
+			os.Exit(1)
 		}
 		log.Notice("Project initialized")
 	},

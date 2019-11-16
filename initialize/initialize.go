@@ -9,7 +9,7 @@ import (
 
 const commitMsg string = `#!/bin/bash
 
-komutan validate -m $2 || exit 1`
+komutan validate -f $1`
 
 var (
 	log           = logging.MustGetLogger("base")
