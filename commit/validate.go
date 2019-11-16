@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	log = logging.MustGetLogger("base")
+	log             = logging.MustGetLogger("base")
 	defaultTemplate = `^(feat|fix|refactor|chore)(\([a-zA-Z0-9]*-?[a-zA-z0-9]+\))?:\s[a-z].([a-zA-Z0-9\.',_-]|\s)+[^\s\.\!\?=_-]$`
 )
 
@@ -23,9 +23,9 @@ func Validate(message string) error {
 
 	matched, _ := regexp.MatchString(defaultTemplate, message)
 	if !matched {
-		return errors.New("commit message is not compatible with commit template")
+		return errors.New("\"" + message + "\"" + " commit message is not valid")
 	}
 
-	log.Notice("commit message suitable for template")
+	log.Notice("\"" + message + "\"" + " commit message is valid")
 	return nil
 }
