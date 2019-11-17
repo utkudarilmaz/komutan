@@ -9,22 +9,46 @@ import (
 
 var (
 	Message string
+	File    string
 )
 
 func init() {
-	validateCmd.Flags().StringVarP(&Message, "message", "m", "", "commit message")
-	validateCmd.MarkFlagRequired("message")
-	rootCmd.AddCommand(validateCmd)
+	validate.Flags().StringVarP(
+		&Message,
+		"message",
+		"m",
+		"",
+		"commit message",
+	)
+	validate.Flags().StringVarP(
+		&File,
+		"file",
+		"f",
+		"",
+		"commit message file",
+	)
+	rootCmd.AddCommand(validate)
 }
 
-var validateCmd = &cobra.Command{
+var validate = &cobra.Command{
 	Use:   "validate",
 	Short: "validate the given commit message",
+	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		err := commit.Validate(Message)
-		if err != nil {
-			log.Error(err.Error())
-			os.Exit(1)
+
+		if len(Message) > 0 {
+			err := commit.ValidateCommitMsgString(Message)
+			if err != nil {
+				log.Errorf(err.Error())
+				os.Exit(1)
+			}
+		} else {
+			err := commit.ValidateCommitMsgFile(File)
+			if err != nil {
+				log.Errorf(err.Error())
+				os.Exit(1)
+
+			}
 		}
 	},
 }
