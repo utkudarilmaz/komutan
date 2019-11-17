@@ -1,6 +1,7 @@
 package core
 
 import (
+	"io/ioutil"
 	"os"
 
 	"github.com/op/go-logging"
@@ -34,10 +35,19 @@ func InitLogger() {
 		levelBackend.SetLevel(logging.NOTICE, "")
 	case "DEBUG":
 		levelBackend.SetLevel(logging.DEBUG, "")
+	case "NONE":
+		disableLogger()
+		return
 	default:
 		levelBackend.SetLevel(logging.INFO, "")
 	}
 
 	logging.SetBackend(levelBackend)
+}
 
+func disableLogger() {
+	_ = logging.MustGetLogger("base")
+	stdout := logging.NewLogBackend(ioutil.Discard, "", 0)
+	levelBackend := logging.AddModuleLevel(stdout)
+	logging.SetBackend(levelBackend)
 }
