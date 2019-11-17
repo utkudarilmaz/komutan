@@ -31,3 +31,7 @@ clean: distclean
 .PHONY: upgrade
 upgrade: distclean install
 	@echo "Upgrade finished!"
+
+.PHONY: test
+test:
+	@go test ./...
