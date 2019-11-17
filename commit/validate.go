@@ -11,7 +11,7 @@ import (
 
 var (
 	log             = logging.MustGetLogger("base")
-	defaultTemplate = `^(feat|fix|refactor|chore)(\([a-zA-Z0-9]*-?[a-zA-z0-9]+\))?:\s[a-z].([a-zA-Z0-9\.',_-]|\s)+[^\.\!\?=_-]$`
+	defaultTemplate = `^(feat|fix|refactor|chore)(\([a-zA-Z0-9]*-?[a-zA-z0-9]+\))?:\s[a-z-].([a-zA-Z0-9\.',_-]|\s)+[^\.\!\?=_-]$`
 )
 
 // ValidateCommitMsgFile is validate the commit message where is given file
