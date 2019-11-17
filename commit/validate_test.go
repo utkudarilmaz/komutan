@@ -48,3 +48,46 @@ func TestValidateCommitMsgString(t *testing.T) {
 	}
 }
 
+func TestValidateCommitMsgFile(t *testing.T) {
+	file, err := os.Create("/tmp/commit")
+	if err != nil {
+		t.Errorf(
+			"error occured when creating file: %s",
+			err.Error(),
+		)
+	}
+	defer file.Close()
+
+	err = file.Chmod(0755)
+	if err != nil {
+		t.Errorf(
+			"error occured when changing file permission bits: %s",
+			err.Error(),
+		)
+	}
+
+	_, err = file.WriteString(trueMessages[0])
+	if err != nil {
+		t.Errorf(
+			"error occured when writing commit message to file: %s",
+			err.Error(),
+		)
+	}
+
+	err = file.Sync()
+	if err != nil {
+		t.Errorf(
+			"error occured when commiting to file: %s",
+			err.Error(),
+		)
+	}
+
+	err = ValidateCommitMsgFile("/tmp/commit")
+	if err != nil {
+		t.Errorf(
+			"%s message readed from a file but some error occured: %s",
+			trueMessages[0],
+			err.Error(),
+		)
+	}
+}
