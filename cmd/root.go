@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"os"
-
 	logging "github.com/op/go-logging"
 	"github.com/spf13/cobra"
 )
@@ -20,6 +18,5 @@ var rootCmd = &cobra.Command{
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		log.Error(err.Error())
-		os.Exit(1)
 	}
 }
