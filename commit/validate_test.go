@@ -12,6 +12,10 @@ var (
 		"refactor(build): test3 . wEqW_w",
 		"feat(build-test): so2mething",
 		"feat(build): .new feature",
+		`refactor: commit msg validator name changed and validation steps added
+
+		ValidateCommitMsgString function name change to ValidateCommitMsg. Also validation process splitting some steps. Commit message's header section character limit controlling after now
+`,
 	}
 
 	falseMessages = []string{
@@ -22,6 +26,10 @@ var (
 		"crazy: new feature",
 		"fix more powWWW3213er",
 		"fix: more *powWWW3213er!",
+		`refactor: commit msg validator name changed and validation steps added1322333333333333333333333333333333333
+
+		ValidateCommitMsgString function name change to ValidateCommitMsg. Also validation process splitting some steps. Commit message's header section character limit controlling after now
+`,
 	}
 )
 
