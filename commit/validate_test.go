@@ -48,7 +48,7 @@ func TestValidateCommitMsg(t *testing.T) {
 	}
 }
 
-func TestValidateCommitMsgFile(t *testing.T) {
+func TestValidateCommitMsgFromFile(t *testing.T) {
 	file, err := os.Create("/tmp/commit")
 	if err != nil {
 		t.Errorf(
@@ -82,7 +82,7 @@ func TestValidateCommitMsgFile(t *testing.T) {
 		)
 	}
 
-	err = ValidateCommitMsgFile("/tmp/commit")
+	err = ValidateCommitMsgFromFile("/tmp/commit")
 	if err != nil {
 		t.Errorf(
 			"%s message readed from a file but some error occured: %s",

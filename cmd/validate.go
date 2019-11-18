@@ -43,7 +43,7 @@ var validate = &cobra.Command{
 				os.Exit(1)
 			}
 		} else {
-			err := commit.ValidateCommitMsgFile(File)
+			err := commit.ValidateCommitMsgFromFile(File)
 			if err != nil {
 				log.Errorf(err.Error())
 				os.Exit(1)

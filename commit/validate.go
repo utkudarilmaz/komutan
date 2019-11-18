@@ -13,8 +13,8 @@ var (
 	log = logging.MustGetLogger("base")
 )
 
-// ValidateCommitMsgFile is validate the commit message where is given file
-func ValidateCommitMsgFile(path string) error {
+// ValidateCommitMsgFromFile is validate the commit message where is given file
+func ValidateCommitMsgFromFile(path string) error {
 	file, err := os.Open(path)
 	if err != nil {
 		return err
@@ -26,14 +26,10 @@ func ValidateCommitMsgFile(path string) error {
 		return err
 	}
 
-	if matched, err := regexp.Match(defaultTemplate, buffer); !matched {
-		if err != nil {
-			return err
-		}
-		return errors.New("\"" + string(buffer[:len(buffer)-1]) + "\"" + " commit message is not valid")
+	err = ValidateCommitMsg(string(buffer[:]))
+	if err != nil {
+		return err
 	}
-
-	log.Notice("\"" + string(buffer[:len(buffer)-1]) + "\"" + " commit message is valid")
 
 	return nil
 }
