@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"regexp"
+	"strings"
 
 	logging "github.com/op/go-logging"
 )
@@ -34,27 +35,38 @@ func ValidateCommitMsgFromFile(path string) error {
 	return nil
 }
 
+func validateHeader(message string) (int, error) {
+	typeTemplate := regexp.MustCompile(`^(feat|docs|style|perf|test|fix|refactor|chore){1}(\([a-zA-Z0-9]+(-?)[a-zA-z0-9]+\))?:\ [a-z-.]{1}([\sa-zA-Z0-9.,-_=-])+[^\.,\s!\?\\\ \{\}\[\]]+$`)
+	var lines = strings.Split(message, "\n")
+
+	index := typeTemplate.FindStringIndex(lines[0])
+	if index == nil {
+		return 0, errors.New("\"" + message + "\"" + " commit message is not valid")
+	} else if index[0] != 0 {
+		return 0, errors.New("\"" + message + "\"" + " commit message's type or optional scope is not valid")
+	} else if index[1] > 72 {
+		return 0, errors.New("\"" + message + "\"" + " commit message can't be more than 72 character")
+	}
+	return index[1], nil
+}
+
+func validateBody(message string) bool {
+	descriptionTemplate := regexp.MustCompile(`^(.|\s)*$`)
+	return descriptionTemplate.MatchString(message)
+}
+
 // ValidateCommitMsg is validating the given commit message looking
 // some regexp rules.
 // RegExp rules produced based a couple policies where the policies defined
 // https://www.conventionalcommits.org
 func ValidateCommitMsg(message string) error {
-	typeTemplate := regexp.MustCompile(`^(feat|docs|style|perf|test|fix|refactor|chore){1}(\([a-zA-Z0-9]+(-?)[a-zA-z0-9]+\))?:\ [a-z-.]{1}([\sa-zA-Z0-9.,-_=-])+[^\.,\s!\?\\\ \{\}\[\]]+$`)
 
-	index := typeTemplate.FindStringIndex(message)
-	if index == nil {
-		return errors.New("\"" + message + "\"" + " commit message is not valid")
-	} else if index[0] != 0 {
-		return errors.New("\"" + message + "\"" + " commit message's type or optional scope is not valid")
-	} else if index[1] > 72 {
-		return errors.New("\"" + message + "\"" + " commit message can't be more than 72 character")
+	index, err := validateHeader(message)
+	if err != nil {
+		return err
 	}
 
-	message = message[index[1]:]
-	descriptionTemplate := regexp.MustCompile(`^(.|\s)*$`)
-
-	index = descriptionTemplate.FindStringIndex(message)
-	if index == nil {
+	if matched := validateBody(message[index:]); !matched {
 		return errors.New("\"" + message + "\"" + " commit body is not valid")
 	}
 
