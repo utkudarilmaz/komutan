@@ -34,4 +34,5 @@ upgrade: distclean install
 
 .PHONY: test
 test:
-	@go test ./...
+	@go test -cover -coverprofile /tmp/komutan.test ./... \
+	| tee /tmp/komutan.covarage
