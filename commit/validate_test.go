@@ -11,10 +11,10 @@ var (
 		"fix: -word counter",
 		"refactor(build): test3",
 		"feat(build-test): so2mething",
+		"feat(build): .new feature",
 	}
 
 	falseMessages = []string{
-		"feat(build): .new feature",
 		"fix: Word counter",
 		"refactor(build-):",
 		"feat(build-test): something.",
@@ -25,10 +25,10 @@ var (
 	}
 )
 
-func TestValidateCommitMsgString(t *testing.T) {
+func TestValidateCommitMsg(t *testing.T) {
 
 	for index := 0; index < len(trueMessages); index++ {
-		err := ValidateCommitMsgString(trueMessages[index])
+		err := ValidateCommitMsg(trueMessages[index])
 		if err != nil {
 			t.Errorf(
 				"%s message has true format but can't pass the validation",
@@ -38,7 +38,7 @@ func TestValidateCommitMsgString(t *testing.T) {
 	}
 
 	for index := 0; index < len(falseMessages); index++ {
-		err := ValidateCommitMsgString(falseMessages[index])
+		err := ValidateCommitMsg(falseMessages[index])
 		if err == nil {
 			t.Errorf(
 				"%s message has wrong template but pass the validation",

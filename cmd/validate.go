@@ -37,7 +37,7 @@ var validate = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 
 		if len(Message) > 0 {
-			err := commit.ValidateCommitMsgString(Message)
+			err := commit.ValidateCommitMsg(Message)
 			if err != nil {
 				log.Errorf(err.Error())
 				os.Exit(1)

@@ -10,8 +10,7 @@ import (
 )
 
 var (
-	log             = logging.MustGetLogger("base")
-	defaultTemplate = `^(feat|fix|refactor|chore)(\([a-zA-Z0-9]*-?[a-zA-z0-9]+\))?:\s[a-z-].([a-zA-Z0-9\.',_-]|\s)+[^\.\!\?=_-]$`
+	log = logging.MustGetLogger("base")
 )
 
 // ValidateCommitMsgFile is validate the commit message where is given file
@@ -39,18 +38,28 @@ func ValidateCommitMsgFile(path string) error {
 	return nil
 }
 
-// ValidateCommitMsgString is validating the given commit message with following RegExp.
-// ^(feat|fix|refactor|chore)(\([a-zA-Z0-9]*-?[a-zA-z0-9]+\))?:\s[a-z].([a-zA-Z0-9\.,_-]|\s)+[^\.\!\?=_-]$
+// ValidateCommitMsg is validating the given commit message looking
+// some regexp rules.
 // RegExp rules produced based a couple policies where the policies defined
 // https://www.conventionalcommits.org
-func ValidateCommitMsgString(message string) error {
-	if len(message) > 72 || len(message) < 7 {
-		return errors.New("message length must between 7 and 72 character")
+func ValidateCommitMsg(message string) error {
+	typeTemplate := regexp.MustCompile(`^(feat|docs|style|perf|test|fix|refactor|chore){1}(\([a-zA-Z0-9]+(-?)[a-zA-z0-9]+\))?:\ [a-z-.]{1}([\sa-zA-Z0-9.,-_=-])+[^\.,\s!\?\\\ \{\}\[\]]+$`)
+
+	index := typeTemplate.FindStringIndex(message)
+	if index == nil {
+		return errors.New("\"" + message + "\"" + " commit message is not valid")
+	} else if index[0] != 0 {
+		return errors.New("\"" + message + "\"" + " commit message's type or optional scope is not valid")
+	} else if index[1] > 72 {
+		return errors.New("\"" + message + "\"" + " commit message can't be more than 72 character")
 	}
 
-	matched, _ := regexp.MatchString(defaultTemplate, message)
-	if !matched {
-		return errors.New("\"" + message + "\"" + " commit message is not valid")
+	message = message[index[1]:]
+	descriptionTemplate := regexp.MustCompile(`^(.|\s)*$`)
+
+	index = descriptionTemplate.FindStringIndex(message)
+	if index == nil {
+		return errors.New("\"" + message + "\"" + " commit body is not valid")
 	}
 
 	log.Notice("\"" + message + "\"" + " commit message is valid")
