@@ -39,4 +39,4 @@ test:
 
 .PHONY: uninstall
 uninstall: clean distclean
-	@echo "komutan uninstalled successfully!"
+	@echo "Komutan uninstalled successfully!"
