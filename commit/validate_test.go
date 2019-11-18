@@ -9,7 +9,7 @@ var (
 	trueMessages = []string{
 		"feat(build): new feature",
 		"fix: -word counter",
-		"refactor(build): test3",
+		"refactor(build): test3 . wEqW_w",
 		"feat(build-test): so2mething",
 		"feat(build): .new feature",
 	}
@@ -66,7 +66,7 @@ func TestValidateCommitMsgFromFile(t *testing.T) {
 		)
 	}
 
-	_, err = file.WriteString(trueMessages[0])
+	_, err = file.WriteString(trueMessages[5])
 	if err != nil {
 		t.Errorf(
 			"error occured when writing commit message to file: %s",
@@ -86,7 +86,7 @@ func TestValidateCommitMsgFromFile(t *testing.T) {
 	if err != nil {
 		t.Errorf(
 			"%s message readed from a file but some error occured: %s",
-			trueMessages[0],
+			trueMessages[5],
 			err.Error(),
 		)
 	}
