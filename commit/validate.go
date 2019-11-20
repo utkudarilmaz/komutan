@@ -36,7 +36,7 @@ func ValidateCommitMsgFromFile(path string) error {
 }
 
 func validateHeader(message string) (int, error) {
-	typeTemplate := regexp.MustCompile(`^(feat|docs|style|perf|test|fix|refactor|chore){1}(\([a-zA-Z0-9]+(-?)[a-zA-z0-9]+\))?:\ [a-z-.]{1}([\sa-zA-Z0-9.,-_=-])+[^\.,\s!\?\\\ \{\}\[\]]+$`)
+	typeTemplate := regexp.MustCompile(`^(feat|docs|style|perf|test|fix|refactor|chore){1}(\([a-zA-Z0-9]+(-?)[a-zA-z0-9]+\))?!?:\ [a-z-.]{1}.+[^\.,\s!\?\\\ \{\}\[\]]+$`)
 	var lines = strings.Split(message, "\n")
 
 	index := typeTemplate.FindStringIndex(lines[0])
