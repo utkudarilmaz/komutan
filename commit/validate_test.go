@@ -8,9 +8,10 @@ import (
 var (
 	trueMessages = []string{
 		"feat(build): new feature",
-		"fix: -word counter",
+		"fix: -word counte!r",
 		"refactor(build): test3 . wEqW_w",
-		"feat(build-test): so2mething",
+		"feat(build-test)!: so2mething",
+		"fix!: word count''er2",
 		"feat(build): .new feature",
 		`refactor: commit msg validator name changed and validation steps added
 
