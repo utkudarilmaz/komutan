@@ -1,3 +1,5 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/utkudarilmaz/komutan)](https://goreportcard.com/report/github.com/utkudarilmaz/komutan)
+
 # Komutan
 
 Komutan is a commit message template validator. Komutan creates a commit-msg
