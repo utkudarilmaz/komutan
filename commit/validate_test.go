@@ -86,7 +86,7 @@ func TestValidateCommitMsgFromFile(t *testing.T) {
 	err = file.Sync()
 	if err != nil {
 		t.Errorf(
-			"error occurred when commiting to file: %s",
+			"error occurred when committing to file: %s",
 			err.Error(),
 		)
 	}

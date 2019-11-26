@@ -13,7 +13,7 @@ func TestGetEnvOrError(t *testing.T) {
 	value, err := GetEnvOrError(trueKey)
 	if err != nil {
 		t.Errorf(
-			"%s environment variable setted but error occured when key getted",
+			"%s environment variable setted but error occurred when key getted",
 			trueKey,
 		)
 	}
