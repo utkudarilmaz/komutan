@@ -14,21 +14,11 @@ import (
 var (
 	log = logging.MustGetLogger("base")
 	// patchRegexpControl = `^v\d\.\d\.\d(-(alpha|beta|teta)\.\d)?$`
-	patchRegexp = `^v\d\.\d\.\d$`
+	patchRegexp = `^v\d+\.\d+\.\d+$`
 )
 
-type alphabetic []string
-
-func (list alphabetic) Len() int { return len(list) }
-
-func (list alphabetic) Swap(i, j int) { list[i], list[j] = list[j], list[i] }
-
-func (list alphabetic) Less(i, j int) bool {
-	var si string = list[i]
-	var sj string = list[j]
-	return si < sj
-}
-
+// Patch doing increase the latest tag's least significant bit to one point.
+// Example: latest tag v1.0.3 -> new tag: v1.0.4
 func Patch() error {
 
 	tags, err := walkTags()
@@ -36,8 +26,8 @@ func Patch() error {
 		return err
 	}
 
-	filterPatchTags(tags)
-	sort.Sort(alphabetic(tags))
+	tags = filterPatchTags(tags)
+	sort.Strings(tags)
 
 	// regexp := regexp.MustCompile(patchRegexp)
 	//
@@ -47,10 +37,8 @@ func Patch() error {
 	//
 	// regexp := regexp.MustCompile(patchRegexpControl)
 	//
-	log.Debug("latest tag is %s", tags)
 	log.Debug("latest tag is %s", tags[len(tags)-1])
 	return nil
-
 }
 
 func walkTags() ([]string, error) {
@@ -77,14 +65,16 @@ func walkTags() ([]string, error) {
 	return list, nil
 }
 
-func filterPatchTags(tags []string) {
+func filterPatchTags(tags []string) []string {
 
 	filteredTags := []string{}
 
 	regexp := regexp.MustCompile(patchRegexp)
-	for i := 0; i < len(tags); i++ {
-		filteredTags = append(filteredTags, regexp.FindString(tags[i]))
-	}
-	copy(tags, filteredTags)
 
+	for i := 0; i < len(tags); i++ {
+		if tmp := regexp.FindString(tags[i]); tmp != "" {
+			filteredTags = append(filteredTags, tmp)
+		}
+	}
+	return filteredTags
 }
