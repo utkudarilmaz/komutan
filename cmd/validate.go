@@ -13,24 +13,24 @@ var (
 )
 
 func init() {
-	validate.Flags().StringVarP(
+	validateCmd.Flags().StringVarP(
 		&Message,
 		"message",
 		"m",
 		"",
 		"commit message",
 	)
-	validate.Flags().StringVarP(
+	validateCmd.Flags().StringVarP(
 		&File,
 		"file",
 		"f",
 		"",
 		"commit message file",
 	)
-	rootCmd.AddCommand(validate)
+	rootCmd.AddCommand(validateCmd)
 }
 
-var validate = &cobra.Command{
+var validateCmd = &cobra.Command{
 	Use:   "validate",
 	Short: "validate the given commit message",
 	Args:  cobra.NoArgs,
