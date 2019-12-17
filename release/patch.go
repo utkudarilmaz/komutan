@@ -1,6 +1,7 @@
 package release
 
 import (
+	"errors"
 	"regexp"
 	"sort"
 	"strings"
@@ -27,6 +28,9 @@ func Patch() error {
 	}
 
 	tags = filterPatchTags(tags)
+	if len(tags) < 1 {
+		return errors.New("Any tag found on repository")
+	}
 	sort.Strings(tags)
 
 	// regexp := regexp.MustCompile(patchRegexp)
@@ -39,6 +43,10 @@ func Patch() error {
 	//
 	log.Debug("latest tag is %s", tags[len(tags)-1])
 	return nil
+}
+
+func InitPatch() {
+	// TODO: create initial patch tag
 }
 
 func walkTags() ([]string, error) {
