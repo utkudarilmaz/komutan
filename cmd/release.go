@@ -43,7 +43,7 @@ var releaseCmd = &cobra.Command{
 	Short: "create new release at current commit",
 	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		err := release.Patch()
+		_, err := release.Patch()
 		if err != nil {
 			log.Errorf(err.Error())
 		}
