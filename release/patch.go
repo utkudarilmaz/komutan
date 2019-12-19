@@ -49,6 +49,12 @@ func InitPatch() {
 	// TODO: create initial patch tag
 }
 
+func findLatestPatchBit(tag string) (string, error) {
 	regexp := regexp.MustCompile(patchRegexp)
+	var bit []string
+	if bit = regexp.FindStringSubmatch(tag); len(bit) < 1 {
+		return "", errors.New("No available tags found")
 	}
+
+	return bit[2], nil
 }
