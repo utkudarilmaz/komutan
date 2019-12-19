@@ -4,7 +4,7 @@
 
 Komutan is a commit message template validator. Komutan creates a commit-msg
 hook for you and be sure of your commit messages suitable the
-[Conventional Commits][d1d6b24a] standartds.
+[Conventional Commits][d1d6b24a] standards.
 
 ## Installation
 
