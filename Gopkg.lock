@@ -229,6 +229,8 @@
     "github.com/op/go-logging",
     "github.com/spf13/cobra",
     "gopkg.in/src-d/go-git.v4",
+    "gopkg.in/src-d/go-git.v4/plumbing",
+    "gopkg.in/src-d/go-git.v4/plumbing/object",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
