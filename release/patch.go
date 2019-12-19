@@ -49,40 +49,6 @@ func InitPatch() {
 	// TODO: create initial patch tag
 }
 
-func walkTags() ([]string, error) {
-	repo, err := git.PlainOpen(".")
-	if err != nil {
-		return nil, err
-	}
-
-	tagrefs, err := repo.Tags()
-	if err != nil {
-		return nil, err
-	}
-
-	var list []string
-
-	err = tagrefs.ForEach(func(t *plumbing.Reference) error {
-		list = append(list, strings.Trim(t.Name().String(), "refs/tags/"))
-		return nil
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	return list, nil
-}
-
-func filterPatchTags(tags []string) []string {
-
-	filteredTags := []string{}
-
 	regexp := regexp.MustCompile(patchRegexp)
-
-	for i := 0; i < len(tags); i++ {
-		if tmp := regexp.FindString(tags[i]); tmp != "" {
-			filteredTags = append(filteredTags, tmp)
-		}
 	}
-	return filteredTags
 }
