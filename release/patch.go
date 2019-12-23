@@ -4,6 +4,7 @@ import (
 	"errors"
 	"regexp"
 	"sort"
+	"strconv"
 
 	logging "github.com/op/go-logging"
 )
@@ -24,18 +25,33 @@ func Patch() error {
 		return err
 	}
 
-	tags = filterPatchTags(tags)
+	tags = filterReleaseTags(tags)
 	if len(tags) < 1 {
 		return errors.New("Any tag found on repository")
 	}
 	sort.Strings(tags)
-	bit, err := findLatestPatchBit(tags[len(tags)-1])
 	log.Debug("latest tag is %s", tags[len(tags)-1])
+
+	parsedLatestTag, err := findLatestPatchBit(tags[len(tags)-1])
+	if err != nil {
+		return err
+	}
+
+	patchedBit, err := strconv.Atoi(parsedLatestTag[2])
 
 	if err != nil {
 		return err
 	}
 
+	patchedBit += 1
+	tagName := parsedLatestTag[1] + strconv.Itoa(patchedBit)
+
+	// err = newTag(tagName)
+	// if err != nil {
+	// 	return err
+	// }
+	log.Notice("%s named tag created", tagName)
+	log.Notice("git push origin %s", tagName)
 
 	return nil
 }
@@ -44,12 +60,12 @@ func InitPatch() {
 	// TODO: create initial patch tag
 }
 
-func findLatestPatchBit(tag string) (string, error) {
+func findLatestPatchBit(tag string) ([]string, error) {
 	regexp := regexp.MustCompile(patchRegexp)
-	var bit []string
-	if bit = regexp.FindStringSubmatch(tag); len(bit) < 1 {
-		return "", errors.New("No available tags found")
+	var parsedLatestTag []string
+	if parsedLatestTag = regexp.FindStringSubmatch(tag); len(parsedLatestTag) < 1 {
+		return nil, errors.New("No available tags found")
 	}
 
-	return bit[2], nil
+	return parsedLatestTag, nil
 }
