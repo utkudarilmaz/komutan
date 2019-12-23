@@ -16,6 +16,81 @@ var (
 	tagsParsingRegexp = `^(v)(\d+)(\.)(\d+)(\.)(\d+)$`
 )
 
+type Tag struct {
+	Major uint8
+	Minor uint8
+	Patch uint8
+}
+
+type ByVersion []Tag
+
+func (tags ByVersion) Len() int      { return len(tags) }
+func (tags ByVersion) Swap(i, j int) { tags[i], tags[j] = tags[j], tags[i] }
+func (tags ByVersion) Less(i, j int) bool {
+	if tags[i].Major < tags[j].Major {
+		return true
+	} else if tags[i].Major == tags[j].Major {
+		if tags[i].Minor < tags[j].Minor {
+			return true
+		} else if tags[i].Patch < tags[j].Patch {
+			return true
+		}
+	}
+	return false
+}
+
+func (tag Tag) String() string {
+	return ("v" +
+		strconv.Itoa(int(tag.Major)) + "." +
+		strconv.Itoa(int(tag.Minor)) + "." +
+		strconv.Itoa(int(tag.Patch)))
+}
+
+func ParseTags(tags []string) ([]Tag, error) {
+	var tagList []Tag
+	regexp := regexp.MustCompile(tagsParsingRegexp)
+
+	for i := 0; i < len(tags); i++ {
+		parsedTag := regexp.FindStringSubmatch(tags[i])
+		var tempTag []uint8
+
+		for j := 2; j <= 6; j = j + 2 {
+
+			temp, err := strconv.Atoi(parsedTag[j])
+			if err != nil {
+				return nil, err
+			}
+			tempTag[j] = uint8(temp)
+		}
+
+		tag := Tag{
+			Major: tempTag[0],
+			Minor: tempTag[1],
+			Patch: tempTag[2],
+		}
+		tagList = append(tagList, tag)
+	}
+	return tagList, nil
+}
+
+func (tag Tag) NewRelease() error {
+	repo, err := git.PlainOpen(".")
+	if err != nil {
+		return err
+	}
+
+	headRef, err := repo.Head()
+	if err != nil {
+		return err
+	}
+
+	_, err = repo.CreateTag(tag.String(), headRef.Hash(), nil)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
 
 func walkTags() ([]string, error) {
 	repo, err := git.PlainOpen(".")
