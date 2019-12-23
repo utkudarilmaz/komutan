@@ -2,6 +2,7 @@ package release
 
 import (
 	"regexp"
+	"strconv"
 	"strings"
 
 	git "gopkg.in/src-d/go-git.v4"
@@ -11,11 +12,10 @@ import (
 // (?<=v\d\.\d\.)(\d)
 var (
 	// patchRegexpControl = `^v\d\.\d\.\d(-(alpha|beta|teta)\.\d)?$`
-	tagsRegexp = `^v\d+\.\d+\.\d+$`
+	tagsRegexp        = `^v\d+\.\d+\.\d+$`
+	tagsParsingRegexp = `^(v)(\d+)(\.)(\d+)(\.)(\d+)$`
 )
 
-// Patch doing increase the latest tag's least significant bit to one point.
-// Example: latest tag v1.0.3 -> new tag: v1.0.4
 
 func walkTags() ([]string, error) {
 	repo, err := git.PlainOpen(".")
@@ -41,7 +41,7 @@ func walkTags() ([]string, error) {
 	return list, nil
 }
 
-func filterPatchTags(tags []string) []string {
+func filterReleaseTags(tags []string) []string {
 
 	filteredTags := []string{}
 
