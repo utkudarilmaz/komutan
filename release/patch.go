@@ -17,25 +17,27 @@ var (
 
 // Patch doing increase the latest tag's least significant bit to one point.
 // Example: latest tag v1.0.3 -> new tag: v1.0.4
-func Patch() (string, error) {
+func Patch() error {
 
 	tags, err := walkTags()
 	if err != nil {
-		return "", err
+		return err
 	}
 
 	tags = filterPatchTags(tags)
 	if len(tags) < 1 {
-		return "", errors.New("Any tag found on repository")
+		return errors.New("Any tag found on repository")
 	}
 	sort.Strings(tags)
 	bit, err := findLatestPatchBit(tags[len(tags)-1])
+	log.Debug("latest tag is %s", tags[len(tags)-1])
+
 	if err != nil {
-		return "", err
+		return err
 	}
 
-	log.Debug("latest tag is %s", tags[len(tags)-1])
-	return bit, nil
+
+	return nil
 }
 
 func InitPatch() {
