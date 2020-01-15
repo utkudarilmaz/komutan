@@ -9,9 +9,13 @@ dep:
 
 .PHONY: build
 build:
-	go build -v -ldflags '-d -s -w' -a -tags netgo -installsuffix netgo \
+	@go build -v -ldflags '-d -s -w' -a -tags netgo -installsuffix netgo \
 	  -o dist/komutan main.go
 	@echo "You can find executable under dist directory."
+
+.PHONY: package
+package: build
+	@cd dist && tar -czf komutan.tar.gz komutan ../LICENSE ../README.md
 
 .PHONY: install
 install: build
