@@ -24,10 +24,6 @@ distclean:
 	@sudo rm -f dist/komutan /usr/local/bin/komutan
 	@echo "Komutan deleted from executables."
 
-.PHONY: clean
-clean:
-	@rm -rf ./*
-
 .PHONY: upgrade
 upgrade: distclean install
 	@echo "Upgrade finished!"
@@ -38,5 +34,5 @@ test:
 	| tee /tmp/komutan.covarage
 
 .PHONY: uninstall
-uninstall: clean distclean
+uninstall: distclean
 	@echo "Komutan uninstalled successfully!"
