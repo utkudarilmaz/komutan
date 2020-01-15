@@ -35,24 +35,32 @@ func ValidateCommitMsgFromFile(path string) error {
 	return nil
 }
 
-func validateHeader(message string) (int, error) {
+func validateType(message string) error {
 	typeTemplate := regexp.MustCompile(`^(feat|docs|style|perf|test|fix|refactor|chore){1}(\([a-zA-Z0-9]+(-?)[a-zA-z0-9]+\))?!?:\ [a-z-.]{1}.+[^\.,\s!\?\\\ \{\}\[\]]+$`)
 	var lines = strings.Split(message, "\n")
 
 	index := typeTemplate.FindStringIndex(lines[0])
 	if index == nil {
-		return 0, errors.New("\"" + message + "\"" + " commit message is not valid")
+		return errors.New("\"" + message + "\"" + " commit message is not valid")
 	} else if index[0] != 0 {
-		return 0, errors.New("\"" + message + "\"" + " commit message's type or optional scope is not valid")
+		return errors.New("\"" + message + "\"" + " commit message's type or optional scope is not valid")
 	} else if index[1] > 72 {
-		return 0, errors.New("\"" + message + "\"" + " commit message can't be more than 72 character")
+		return errors.New("\"" + message + "\"" + " commit message can't be more than 72 character")
 	}
-	return index[1], nil
+
+	return nil
 }
 
-func validateBody(message string) bool {
-	descriptionTemplate := regexp.MustCompile(`^(.|\s)*$`)
-	return descriptionTemplate.MatchString(message)
+func validateMerge(message string) error {
+	mergeTemplate := regexp.MustCompile(`^(Merge\ branch\ ).+$`)
+	var lines = strings.Split(message, "\n")
+
+	index := mergeTemplate.FindStringIndex(lines[0])
+	if index == nil {
+		return errors.New("\"" + message + "\"" + " commit message is not valid")
+	}
+
+	return nil
 }
 
 // ValidateCommitMsg is validating the given commit message looking
@@ -61,13 +69,12 @@ func validateBody(message string) bool {
 // https://www.conventionalcommits.org
 func ValidateCommitMsg(message string) error {
 
-	index, err := validateHeader(message)
+	err := validateType(message)
 	if err != nil {
-		return err
-	}
-
-	if matched := validateBody(message[index:]); !matched {
-		return errors.New("\"" + message + "\"" + " commit body is not valid")
+		errX := validateMerge(message)
+		if errX != nil {
+			return err
+		}
 	}
 
 	log.Notice("\"" + message + "\"" + " commit message is valid")
